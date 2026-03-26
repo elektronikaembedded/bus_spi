@@ -1,0 +1,107 @@
+/*******************************************************************************
+ * @file        bus_spi_port.c.example
+ * @author      Sarath S
+ * @date        2026-01-02
+ * @version     1.0
+ * @brief       SPI bus template implementation
+ *
+ * @details
+ * This file provides a template for implementing the SPI bus interface
+ * on a specific platform.
+ *
+ * Copy this file to:
+ *   port/bus_spi/bus_spi_<platform>.c
+ *
+ * Then update the implementation using your platform SDK (STM32, ESP-IDF, etc.)
+ ******************************************************************************/
+
+/*******************************************************************************
+ * Includes
+ *******************************************************************************/
+#include "bus_spi.h"
+
+/* Include your platform headers here */
+// #include "stm32f4xx_hal.h"
+
+/*******************************************************************************
+ * Static functions
+ *******************************************************************************/
+
+static bus_spi_err_t spi_init(bus_spi_t *bus)
+{
+    (void)bus;
+    return BUS_SPI_OK;
+}
+
+static bus_spi_err_t spi_deinit(bus_spi_t *bus)
+{
+    (void)bus;
+    return BUS_SPI_OK;
+}
+
+static bus_spi_err_t spi_transfer(bus_spi_t *bus,
+                                  const uint8_t *tx,
+                                  uint8_t *rx,
+                                  uint16_t len)
+{
+    (void)bus;
+    (void)tx;
+    (void)rx;
+    (void)len;
+
+    return BUS_SPI_ERR_NOT_SUPPORTED;
+}
+
+static bus_spi_err_t spi_write(bus_spi_t *bus,
+                               const uint8_t *tx,
+                               uint16_t len)
+{
+    (void)bus;
+    (void)tx;
+    (void)len;
+
+    return BUS_SPI_OK;
+}
+
+static bus_spi_err_t spi_read(bus_spi_t *bus,
+                              uint8_t *rx,
+                              uint16_t len)
+{
+    (void)bus;
+    (void)rx;
+    (void)len;
+
+    return BUS_SPI_OK;
+}
+
+static bool spi_is_busy(bus_spi_t *bus)
+{
+    (void)bus;
+    return false;
+}
+
+/*******************************************************************************
+ * Ops instance
+ *******************************************************************************/
+
+static const bus_spi_ops_t spi_ops =
+{
+    .init = spi_init,
+    .deinit = spi_deinit,
+    .transfer = spi_transfer,
+    .write = spi_write,
+    .read = spi_read,
+    .is_busy = spi_is_busy,
+};
+
+/**
+ * @brief Get SPI operations instance
+ *
+ * @return Pointer to SPI ops
+ */
+const bus_spi_ops_t *get_bus_spi_ops(void)
+{
+    return &spi_ops;
+}
+
+/****************************** End of file ***********************************/
