@@ -50,8 +50,19 @@ typedef enum
     BUS_SPI_ERR_NULL = -1,
     BUS_SPI_ERR_IO = -2,
     BUS_SPI_ERR_BUSY = -3,
-    BUS_SPI_ERR_NOT_SUPPORTED = -4
+	BUS_SPI_ERR_LENGTH = -4,
+    BUS_SPI_ERR_NOT_SUPPORTED = -5,
+    BUS_SPI_ERR_INVALID_ARGS = -6
 } bus_spi_err_t;
+
+/**
+ * @brief SPI transfer mode.
+ */
+typedef enum
+{
+    SPI_BLOCKING,   /**< Blocking SPI transfer */
+    SPI_DMA         /**< DMA-based SPI transfer */
+} spi_tx_mode_t;
 
 typedef struct bus_spi bus_spi_t;
 
@@ -93,8 +104,15 @@ typedef struct
  */
 struct bus_spi
 {
-    const bus_spi_ops_t *ops; /**< SPI operations */
-    void *ctx;                /**< Platform-specific handle (SPI, DMA, etc.) */
+    const bus_spi_ops_t *ops;  /**< SPI operations */
+    spi_tx_mode_t spi_tx_mode; /**< SPI transfer mode */
+    void *spi_handle;          /**< SPI peripheral handle
+                                     (SPI_HandleTypeDef* for STM32) */
+
+    void *spi_dma_handle;      /**< DMA handle used for SPI transfers
+                                     (DMA_HandleTypeDef* for STM32) */
+
+    void *ctx;                 /**< Platform-specific handle (SPI, DMA, etc.) */
 };
 
 /*******************************************************************************
@@ -119,6 +137,8 @@ bus_spi_err_t bus_spi_init(bus_spi_t *bus, const bus_spi_ops_t *ops);
  * @return BUS_SPI_OK on success
  */
 bus_spi_err_t bus_spi_deinit(bus_spi_t *bus);
+
+const bus_spi_ops_t *get_bus_spi_ops(void);
 
 #ifdef __cplusplus
 }
