@@ -27,7 +27,7 @@
 /**
  * @brief Initialize SPI bus
  */
-bus_spi_err_t bus_spi_init(bus_spi_t *bus, const bus_spi_ops_t *ops)
+bus_spi_err_t bus_spi_init(bus_spi_t *bus, bus_spi_config_t *conf, const bus_spi_ops_t *ops)
 {
     if ((bus == NULL) || (ops == NULL))
     {
@@ -36,6 +36,7 @@ bus_spi_err_t bus_spi_init(bus_spi_t *bus, const bus_spi_ops_t *ops)
 
     bus->ops = ops;
     bus->ctx = NULL;
+    bus->conf = conf;
 
     /* Call platform init if available */
     if (bus->ops->init)

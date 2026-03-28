@@ -62,7 +62,7 @@ typedef enum
 {
     SPI_BLOCKING,   /**< Blocking SPI transfer */
     SPI_DMA         /**< DMA-based SPI transfer */
-} spi_tx_mode_t;
+} spi_tns_mode_t;
 
 typedef struct bus_spi bus_spi_t;
 
@@ -93,6 +93,13 @@ typedef struct
 
 } bus_spi_ops_t;
 
+typedef struct
+{
+    void *spi_handle;
+    void *spi_dma_handle;
+    spi_tns_mode_t tns_mode;
+} bus_spi_config_t;
+
 /*******************************************************************************
  * Bus Object
  *******************************************************************************/
@@ -105,12 +112,17 @@ typedef struct
 struct bus_spi
 {
     const bus_spi_ops_t *ops;  /**< SPI operations */
+#if 0
     spi_tx_mode_t spi_tx_mode; /**< SPI transfer mode */
+
     void *spi_handle;          /**< SPI peripheral handle
                                      (SPI_HandleTypeDef* for STM32) */
 
     void *spi_dma_handle;      /**< DMA handle used for SPI transfers
                                      (DMA_HandleTypeDef* for STM32) */
+#endif
+
+    bus_spi_config_t *conf;
 
     void *ctx;                 /**< Platform-specific handle (SPI, DMA, etc.) */
 };
@@ -127,7 +139,7 @@ struct bus_spi
  *
  * @return BUS_SPI_OK on success
  */
-bus_spi_err_t bus_spi_init(bus_spi_t *bus, const bus_spi_ops_t *ops);
+bus_spi_err_t bus_spi_init(bus_spi_t *bus, bus_spi_config_t *conf, const bus_spi_ops_t *ops);
 
 /**
  * @brief Deinitialize SPI bus
